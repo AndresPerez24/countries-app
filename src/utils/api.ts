@@ -16,4 +16,12 @@ export const searchCountries = async (name: string): Promise<Country[]> => {
     throw new Error('Failed to search countries');
   }
   return response.json();
-}; 
+};
+
+export const fetchCountriesByRegion = async (region: string): Promise<Country[]> => {
+  const response = await fetch(`${BASE_URL}/region/${region}?fields=name,flags,population,region,capital`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch countries for region');
+  }
+  return response.json();
+};
