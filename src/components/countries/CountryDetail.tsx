@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { Country } from '../../types/country';
 import { fetchCountries } from '../../utils/api';
+import { Button, Card } from '../ui';
 
 function CountryDetail() {
   const { countryName } = useParams<{ countryName: string }>();
@@ -18,9 +19,8 @@ function CountryDetail() {
         setLoading(true);
         setError(null);
         const countries = await fetchCountries();
-        const decodedCountryName = decodeURIComponent(countryName);
         const foundCountry = countries.find(
-          c => c.name.common.toLowerCase() === decodedCountryName.toLowerCase()
+          c => c.name.common.toLowerCase() === countryName.toLowerCase()
         );
         
         if (foundCountry) {
@@ -54,26 +54,24 @@ function CountryDetail() {
     return (
       <div className="text-center py-8">
         <p className="text-red-600 mb-4">{error || 'Country not found'}</p>
-        <button
-          onClick={() => navigate('/')}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+        <Button onClick={() => navigate('/')}>
           Back to Countries
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <button
+      <Button
+        variant="outline"
         onClick={() => navigate('/')}
-        className="mb-6 flex items-center text-blue-500 hover:text-blue-700"
+        className="mb-6"
       >
         ← Back to Countries
-      </button>
+      </Button>
 
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <Card shadow="lg" padding="none">
         <div className="md:flex">
           <div className="md:w-1/2">
             <img
@@ -112,7 +110,7 @@ function CountryDetail() {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
