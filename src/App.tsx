@@ -1,9 +1,19 @@
+import Layout from './components/layout/Layout';
+
 function App() {
   return (
-    <div>
-      <h1>Countries Explorer</h1>
-      <p>Welcome to the Countries Explorer app!</p>
-    </div>
+    <Layout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Welcome to Countries App
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Discover information about countries around the world
+          </p>
+        </div>
+      </div>
+    </Layout>
   );
 }
 
