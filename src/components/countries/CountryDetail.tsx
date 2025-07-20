@@ -1,7 +1,8 @@
 import { useState, useEffect, type FC } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, MapPin, Globe, Users, Ruler } from 'lucide-react';
+import { ArrowLeft, MapPin, Globe, Users, Ruler, Heart } from 'lucide-react';
 import { Button, Card } from '../ui';
+import { useFavorites } from '../../hooks/useFavorites';
 import type { Country } from '../../types/country';
 import { fetchCountryByName } from '../../utils/api';
 import { 
@@ -29,6 +30,13 @@ const CountryDetail: FC<CountryDetailProps> = ({
   const [country, setCountry] = useState<Country | null>(propCountry || null);
   const [loading, setLoading] = useState(propLoading);
   const [error, setError] = useState<string | null>(propError);
+  const { toggleFavorite, isFavorite } = useFavorites();
+
+  const handleFavoriteClick = () => {
+    if (country) {
+      toggleFavorite(country);
+    }
+  };
 
   useEffect(() => {
     if (propCountry) {
@@ -124,9 +132,19 @@ const CountryDetail: FC<CountryDetailProps> = ({
 
         <div className="space-y-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              {country.name.common}
-            </h1>
+            <div className="flex items-center gap-3 mb-4">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                {country.name.common}
+              </h1>
+              <button
+                onClick={handleFavoriteClick}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              >
+                <Heart 
+                  className={`h-6 w-6 ${isFavorite(country.name.common) ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-500'}`}
+                />
+              </button>
+            </div>
             {country.name.official && (
               <p className="text-lg text-gray-600 mb-6">
                 {country.name.official}
