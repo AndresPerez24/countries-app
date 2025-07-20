@@ -1,7 +1,8 @@
+import { type ReactNode } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header />

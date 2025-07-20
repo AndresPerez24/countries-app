@@ -2,59 +2,98 @@ import type { Country } from '../types/country';
 
 const BASE_URL = 'https://restcountries.com/v3.1';
 
-const BASIC_FIELDS = 'name,flags,population,region,capital';
+const RETRY_ATTEMPTS = 3;
+const RETRY_DELAY = 1000;
 
-const DETAILED_FIELDS = 'name,flags,population,region,subregion,capital,area,currencies,languages,tld,borders';
+const fetchWithRetry = async (url: string, retries: number = RETRY_ATTEMPTS): Promise<Country[]> => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        if (response.status >= 400 && response.status < 500) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.warn(`Attempt ${i + 1} failed:`, error);
+
+      if (i === retries - 1) {
+        if (error instanceof Error) {
+          throw new Error(`Failed to fetch data after ${retries} attempts: ${error.message}`);
+        }
+        throw new Error(`Failed to fetch data after ${retries} attempts`);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (i + 1)));
+    }
+  }
+
+  throw new Error('Unexpected error in fetchWithRetry');
+};
 
 export const fetchCountries = async (): Promise<Country[]> => {
   try {
-    const response = await fetch(`${BASE_URL}/all?fields=${BASIC_FIELDS}`);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    const data = await response.json();
-    return data;
+    return await fetchWithRetry(`${BASE_URL}/all?fields=name,flags,population,region,capital`);
   } catch (error) {
     console.error('Error fetching countries:', error);
-    throw new Error('Failed to fetch countries.');
-  }
-};
-
-export const fetchCountryByName = async (name: string): Promise<Country> => {
-  try {
-    const response = await fetch(`${BASE_URL}/name/${encodeURIComponent(name)}?fullText=true&fields=${DETAILED_FIELDS}`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('Country not found');
-      }
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    const countries = await response.json();
-    if (!countries || countries.length === 0) {
-      throw new Error('Country not found');
-    }
-    return countries[0];
-  } catch (error) {
-    console.error('Error fetching country:', error);
-    if (error instanceof Error && error.message === 'Country not found') {
-      throw error;
-    }
-    throw new Error('Failed to fetch country details. Please try again.');
+    throw new Error('Unable to load countries. Please check your internet connection and try again.');
   }
 };
 
 export const searchCountries = async (name: string): Promise<Country[]> => {
-  const response = await fetch(`${BASE_URL}/name/${encodeURIComponent(name)}?fields=${BASIC_FIELDS}`);
-  if (!response.ok) {
-    throw new Error('Failed to search countries');
+  if (!name || name.trim().length === 0) {
+    throw new Error('Please enter a country name to search');
   }
-  return response.json();
+  
+  try {
+    return await fetchWithRetry(`${BASE_URL}/name/${encodeURIComponent(name)}?fields=name,flags,population,region,capital`);
+  } catch (error) {
+    console.error('Error searching countries:', error);
+    if (error instanceof Error && error.message.includes('HTTP 404')) {
+      throw new Error(`No countries found matching "${name}"`);
+    }
+    throw new Error('Unable to search countries. Please try again.');
+  }
 };
 
 export const fetchCountriesByRegion = async (region: string): Promise<Country[]> => {
-  const response = await fetch(`${BASE_URL}/region/${encodeURIComponent(region)}?fields=${BASIC_FIELDS}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch countries for region');
+  if (!region || region.trim().length === 0) {
+    throw new Error('Please select a region');
   }
-  return response.json();
-}; 
+  
+  try {
+    return await fetchWithRetry(`${BASE_URL}/region/${encodeURIComponent(region)}?fields=name,flags,population,region,capital`);
+  } catch (error) {
+    console.error('Error fetching countries by region:', error);
+    if (error instanceof Error && error.message.includes('HTTP 404')) {
+      throw new Error(`No countries found in region "${region}"`);
+    }
+    throw new Error(`Unable to load countries for region "${region}". Please try again.`);
+  }
+};
+
+export const fetchCountryByName = async (name: string): Promise<Country> => {
+  if (!name || name.trim().length === 0) {
+    throw new Error('Country name is required');
+  }
+  
+  try {
+    const countries = await fetchWithRetry(`${BASE_URL}/name/${encodeURIComponent(name)}?fields=name,flags,population,region,capital,area,languages,currencies,borders,timezones&fullText=true`);
+    
+    if (!countries || countries.length === 0) {
+      throw new Error(`Country "${name}" not found`);
+    }
+    
+    return countries[0];
+  } catch (error) {
+    console.error('Error fetching country details:', error);
+    if (error instanceof Error && error.message.includes('HTTP 404')) {
+      throw new Error(`Country "${name}" not found`);
+    }
+    throw new Error(`Unable to load details for "${name}". Please try again.`);
+  }
+};

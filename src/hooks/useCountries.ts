@@ -6,7 +6,6 @@ interface UseCountriesReturn {
   countries: Country[];
   loading: boolean;
   error: string | null;
-  refetch: () => void;
 }
 
 export const useCountries = (): UseCountriesReturn => {
@@ -14,32 +13,28 @@ export const useCountries = (): UseCountriesReturn => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadCountries = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchCountries();
-      setCountries(data);
-    } catch (err) {
-      setError('Failed to load countries. Please try again.');
-      console.error('Error loading countries:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadCountries = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchCountries();
+        setCountries(data);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load countries. Please try again.';
+        setError(errorMessage);
+        console.error('Error loading countries:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadCountries();
   }, []);
-
-  const refetch = () => {
-    loadCountries();
-  };
 
   return {
     countries,
     loading,
-    error,
-    refetch
+    error
   };
-}; 
+};

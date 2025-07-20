@@ -1,5 +1,4 @@
-import type { FC } from "react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, type FC } from "react";
 import SearchBar from "../components/countries/SearchBar";
 import FilterBar from "../components/countries/FilterBar";
 import CountryList from "../components/countries/CountryList";

@@ -1,10 +1,9 @@
-import React from 'react';
-
+import { type ReactNode } from 'react';
 interface CardProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
-  header?: React.ReactNode;
-  footer?: React.ReactNode;
+  header?: ReactNode;
+  footer?: ReactNode;
   padding?: 'none' | 'sm' | 'md' | 'lg';
   shadow?: 'none' | 'sm' | 'md' | 'lg';
 }

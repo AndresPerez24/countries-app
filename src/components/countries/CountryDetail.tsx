@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, Globe, Users, Ruler } from 'lucide-react';
 import { Button, Card } from '../ui';
@@ -19,7 +19,7 @@ interface CountryDetailProps {
   className?: string;
 }
 
-const CountryDetail: React.FC<CountryDetailProps> = ({ 
+const CountryDetail: FC<CountryDetailProps> = ({ 
   country: propCountry, 
   loading: propLoading = false, 
   error: propError = null,
@@ -111,7 +111,6 @@ const CountryDetail: React.FC<CountryDetailProps> = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Flag */}
         <div className="space-y-6">
           <div className="aspect-[16/10] overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
             <img
@@ -123,9 +122,7 @@ const CountryDetail: React.FC<CountryDetailProps> = ({
           </div>
         </div>
 
-        {/* Country Information */}
         <div className="space-y-8">
-          {/* Basic Info */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
               {country.name.common}

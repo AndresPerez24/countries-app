@@ -1,5 +1,7 @@
 import type { Country } from '../../types/country';
 import CountryCard from './CountryCard';
+import { ClipLoader } from 'react-spinners';
+import { XCircle, SearchX } from 'lucide-react';
 
 interface CountryListProps {
   countries: Country[];
@@ -10,30 +12,51 @@ interface CountryListProps {
 function CountryList({ countries, loading, error }: CountryListProps) {
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-600">Loading countries...</p>
+      <div className="flex justify-center items-center py-12">
+        <div className="text-center">
+          <ClipLoader 
+            size={32}
+            color="#3b82f6"
+            loading={true}
+            speedMultiplier={0.8}
+            className="mx-auto mb-4"
+          />
+          <p className="text-gray-600">Loading countries...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-8">
-        <p className="text-red-600 mb-4">{error}</p>
-        <button 
-          onClick={() => window.location.reload()}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Try Again
-        </button>
+      <div className="flex justify-center items-center py-12">
+        <div className="text-center max-w-md">
+          <div className="text-red-500 mb-4">
+            <XCircle className="h-12 w-12 mx-auto" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Error loading countries</h3>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition-colors"
+          >
+            Refresh Page
+          </button>
+        </div>
       </div>
     );
   }
 
   if (countries.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-600">No countries found matching your criteria.</p>
+      <div className="flex justify-center items-center py-12">
+        <div className="text-center">
+          <div className="text-gray-400 mb-4">
+            <SearchX className="h-12 w-12 mx-auto" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No countries found</h3>
+          <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
+        </div>
       </div>
     );
   }
@@ -47,4 +70,4 @@ function CountryList({ countries, loading, error }: CountryListProps) {
   );
 }
 
-export default CountryList;
+export default CountryList; 

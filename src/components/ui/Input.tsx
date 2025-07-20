@@ -1,10 +1,10 @@
-import React, { useId } from 'react';
+import { type ReactNode, type InputHTMLAttributes, useId } from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helper?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 }
 
 function Input({ 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { Input } from '../ui';
 
 interface SearchBarProps {
@@ -8,7 +8,7 @@ interface SearchBarProps {
 function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     onSearch(value);
