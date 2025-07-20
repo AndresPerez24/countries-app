@@ -1,7 +1,8 @@
-import type { Country } from '../../types/country';
-import CountryCard from './CountryCard';
-import { ClipLoader } from 'react-spinners';
-import { XCircle, SearchX } from 'lucide-react';
+import { motion } from "framer-motion";
+import type { Country } from "../../types/country";
+import CountryCard from "./CountryCard";
+import { ClipLoader } from "react-spinners";
+import { XCircle, SearchX } from "lucide-react";
 
 interface CountryListProps {
   countries: Country[];
@@ -12,9 +13,14 @@ interface CountryListProps {
 function CountryList({ countries, loading, error }: CountryListProps) {
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-12">
+      <motion.div
+        className="flex justify-center items-center py-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="text-center">
-          <ClipLoader 
+          <ClipLoader
             size={32}
             color="#3b82f6"
             loading={true}
@@ -23,51 +29,78 @@ function CountryList({ countries, loading, error }: CountryListProps) {
           />
           <p className="text-gray-600">Loading countries...</p>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center py-12">
+      <motion.div
+        className="flex justify-center items-center py-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="text-center max-w-md">
           <div className="text-red-500 mb-4">
             <XCircle className="h-12 w-12 mx-auto" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Error loading countries</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Error loading countries
+          </h3>
           <p className="text-gray-600 mb-6">{error}</p>
-          <button 
+          <motion.button
             onClick={() => window.location.reload()}
             className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Refresh Page
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   if (countries.length === 0) {
     return (
-      <div className="flex justify-center items-center py-12">
+      <motion.div
+        className="flex justify-center items-center py-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="text-center">
           <div className="text-gray-400 mb-4">
             <SearchX className="h-12 w-12 mx-auto" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No countries found</h3>
-          <p className="text-gray-600">Try adjusting your search or filter criteria.</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            No countries found
+          </h3>
+          <p className="text-gray-600">
+            Try adjusting your search or filter criteria.
+          </p>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {countries.map((country: Country) => (
-        <CountryCard key={country.name.common} country={country} />
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {countries.map((country: Country, index: number) => (
+        <CountryCard
+          key={country.name.common}
+          country={country}
+          index={index}
+        />
       ))}
-    </div>
+    </motion.div>
   );
 }
 
-export default CountryList; 
+export default CountryList;
