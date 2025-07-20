@@ -5,7 +5,7 @@ import CountryDetail from "../components/countries/CountryDetail";
 const CountryDetailPage: FC = () => {
   return (
     <motion.div
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}

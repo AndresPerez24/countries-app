@@ -57,7 +57,7 @@ const HomePage: FC = () => {
 
   return (
     <motion.div
-      className="container mx-auto px-4 py-8"
+      className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -68,10 +68,10 @@ const HomePage: FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
           Explore Countries
         </h1>
-        <p className="text-gray-600">
+        <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto">
           Discover countries around the world with detailed information and
           beautiful flags.
         </p>

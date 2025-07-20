@@ -28,7 +28,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="relative max-w-md">
+      <div className="relative w-full max-w-md sm:max-w-lg mx-auto">
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileFocus={{ scale: 1.02 }}

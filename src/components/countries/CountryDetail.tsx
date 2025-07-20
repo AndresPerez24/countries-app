@@ -110,7 +110,7 @@ const CountryDetail: FC<CountryDetailProps> = ({
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         <div className="space-y-6">
           <div className="aspect-[16/10] overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
             <img
@@ -124,7 +124,7 @@ const CountryDetail: FC<CountryDetailProps> = ({
 
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               {country.name.common}
             </h1>
             {country.name.official && (

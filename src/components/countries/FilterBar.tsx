@@ -19,7 +19,7 @@ interface FilterBarProps {
   }: FilterBarProps) {
     return (
       <motion.div 
-        className="flex flex-col sm:flex-row gap-4 mb-6 p-4 bg-white border border-gray-200 rounded-lg"
+        className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6 p-4 sm:p-6 bg-white border border-gray-200 rounded-lg"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
