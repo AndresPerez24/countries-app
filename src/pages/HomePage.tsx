@@ -3,14 +3,8 @@ import { motion } from "framer-motion";
 import SearchBar from "../components/countries/SearchBar";
 import FilterBar from "../components/countries/FilterBar";
 import CountryList from "../components/countries/CountryList";
-import { useCountries } from "../hooks/useCountries";
-import { useFavorites } from "../hooks/useFavorites";
-import {
-  filterBySearch,
-  filterByRegion,
-  sortCountries,
-  getUniqueRegions,
-} from "../utils/countryUtils";
+import { useCountriesData, useFavorites } from "../hooks";
+import { getUniqueRegions } from "../utils/countryUtils";
 
 const HomePage: FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,33 +13,21 @@ const HomePage: FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
 
-  const { countries, loading, error } = useCountries();
   const { getFavorites, favoritesCount } = useFavorites();
+  const favoriteNames = getFavorites();
+
+  const { data: countries, isLoading: loading, error } = useCountriesData({
+    searchTerm,
+    selectedRegion,
+    sortField,
+    sortOrder,
+    activeTab,
+    favoriteNames,
+  });
 
   const regions = useMemo(() => {
     return getUniqueRegions(countries);
   }, [countries]);
-
-  const filteredAndSortedCountries = useMemo(() => {
-    let filtered = countries;
-
-    if (activeTab === "favorites") {
-      const favoriteNames = getFavorites();
-      filtered = filtered.filter(country => favoriteNames.includes(country.name.common));
-    }
-
-    if (searchTerm) {
-      filtered = filterBySearch(filtered, searchTerm);
-    }
-
-    if (selectedRegion) {
-      filtered = filterByRegion(filtered, selectedRegion);
-    }
-
-    filtered = sortCountries(filtered, sortField, sortOrder);
-
-    return filtered;
-  }, [countries, searchTerm, selectedRegion, sortField, sortOrder, activeTab, getFavorites]);
 
   const handleSearch = (query: string) => {
     setSearchTerm(query);
@@ -62,6 +44,8 @@ const HomePage: FC = () => {
     setSortField(field);
     setSortOrder(order);
   };
+
+  const errorMessage = error instanceof Error ? error.message : 'Failed to load countries. Please try again.';
 
   return (
     <motion.div
@@ -155,9 +139,9 @@ const HomePage: FC = () => {
         </motion.div>
       ) : (
         <CountryList
-          countries={filteredAndSortedCountries}
+          countries={countries}
           loading={loading}
-          error={error}
+          error={error ? errorMessage : null}
         />
       )}
     </motion.div>

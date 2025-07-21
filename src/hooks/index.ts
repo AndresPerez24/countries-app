@@ -1,1 +1,2 @@
-export { useCountries } from './useCountries';
+export { useFavorites } from "./useFavorites";
+export { useCountryQuery, useCountriesData } from "./useQueries";

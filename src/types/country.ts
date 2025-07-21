@@ -21,3 +21,12 @@ export interface Country {
   tld?: string[];
   borders?: string[];
 }
+
+export interface UseCountriesDataOptions {
+  searchTerm?: string;
+  selectedRegion?: string;
+  sortField?: "name" | "population";
+  sortOrder?: "asc" | "desc";
+  activeTab?: "all" | "favorites";
+  favoriteNames?: string[];
+}

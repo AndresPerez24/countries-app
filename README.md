@@ -19,6 +19,7 @@ A React app to learn about countries. Built with TypeScript and Tailwind CSS.
 - React Router for navigation
 - REST Countries API for data
 - Jest + React Testing Library for tests
+- React Query (TanStack Query) for server state management
 - API: https://restcountries.com/
 
 ## Getting Started
