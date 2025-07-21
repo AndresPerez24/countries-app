@@ -1,8 +1,12 @@
 const FAVORITES_KEY = 'countries-favorites';
 
 export const getFavorites = (): string[] => {
-  const stored = localStorage.getItem(FAVORITES_KEY);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(FAVORITES_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
 };
 
 const saveFavorites = (favorites: string[]): void => {

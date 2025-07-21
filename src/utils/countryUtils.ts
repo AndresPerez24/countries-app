@@ -62,15 +62,17 @@ export const sortCountries = (
     if (field === 'name') {
       aValue = a.name.common.toLowerCase();
       bValue = b.name.common.toLowerCase();
+      const comparison = aValue.localeCompare(bValue);
+      return order === 'asc' ? comparison : -comparison;
     } else {
-      aValue = a.population;
-      bValue = b.population;
-    }
-
-    if (order === 'asc') {
-      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    } else {
-      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      aValue = isNaN(a.population) ? 0 : a.population;
+      bValue = isNaN(b.population) ? 0 : b.population;
+      
+      if (order === 'asc') {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
     }
   });
 };
